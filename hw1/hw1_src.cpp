@@ -1,3 +1,4 @@
+#include <iostream>
 #include <fstream>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -12,23 +13,25 @@ int main()
 	// II. Split execution between parent (P) and child (C) processes
 	int pid = fork();  // duplicate current process P (P --> C)
 	
+	// i. branch for parent process (P)
 	if (pid > 0)
 	{
-		kill(-1, SIGSTOP);
-	}
-	else {
+		std::cout << "I am the grandparent process. PID is " << getpid() << "\n";
+		kill(-1, SIGCONT);
+		waitpid(0, NULL, 0);
 	}
 	
-	// i. branch for child process (C)
+	// ii. branch for child process (C)
 	if (pid == 0)
 	{
+		raise(SIGSTOP);
 		int pid_c = fork();  // duplicate current process C (c --> GC)
 		
 		// a. branch for process C
 		if (pid_c > 0)
 		{
 			//raise(SIGSTOP);
-			outFile << "I am the parent process. PID is " << getpid() << "\n";
+			std::cout << "I am the parent process. PID is " << getpid() << "\n";
 			wait(NULL);
 		}
 		
@@ -36,17 +39,9 @@ int main()
 		if (pid_c == 0)
 		{
 			//raise(SIGSTOP);
-			outFile << "I am the grandchild process. PID is " << getpid() << "\n";
+			std::cout << "I am the grandchild process. PID is " << getpid() << "\n";
 		}
 	}
-	
-	// ii. branch for parent process (P)
-	/*if (pid > 0)
-	{
-		outFile << "I am the grandparent process. PID is " << getpid() << "\n";
-		kill(-1, SIGCONT);
-		while(wait(NULL) > 0);
-	}*/
 	
 	
 	// III. Close the program
