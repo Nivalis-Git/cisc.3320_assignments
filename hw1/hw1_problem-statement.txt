@@ -7,10 +7,11 @@ EMPLID: 23699811
 
 
 --------Problem Statement:
-Write a program that uses the fork system command to create a child process. Then have that child process use fork to create its own child progress.
-	Each process should print its PID and a string indicating which process it is in english.
+Write a program that uses the fork system command to create a child process. Then have that child process use fork to create its own child process.
+	Each process must print its PID and a string indicating which process it is in english.
 
 
 --------Assumptions Made:
-I have but one assumption: that the order in which the tasks are given are not the order in which they must be completed. Meaning I can create the GC process and print its data as the last step, rather than creating the GC process before any printing has taken place.
-	This is a trivial assumption, but important as an example of the kind of clarification needed when a particular order of progression is desired.
+1. Printing can take place before all processes have been forked. (e.g., print with P and only after fork C).
+2. The printing, however, must be done in order of hierarchy, starting with the earliest and ending with the latest process. This means eliminating race conditions.
+3. Error handling is unnecessary.
