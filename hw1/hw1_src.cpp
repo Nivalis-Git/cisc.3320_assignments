@@ -29,7 +29,7 @@ int main()
 	// ii. branch for child process (C)
 	if (pid == 0)
 	{
-		raise(SIGSTOP);  // stop process C so that P can print first
+		raise(SIGSTOP);  // stop process C so that P prints first
 		int pid_c = fork();
 		
 		// a. branch for process C
@@ -44,7 +44,7 @@ int main()
 		// b. branch for grandchild process (GC)
 		if (pid_c == 0)
 		{
-			raise(SIGSTOP);  // stop GC so that C can print first
+			raise(SIGSTOP);  // stop process GC so that C prints first
 			outFile << "I am the grandchild process. PID is " << getpid() << "\n";
 			outFile.close();
 		}
