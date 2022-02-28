@@ -1,3 +1,0 @@
-I am the grandparent process. PID is 5556
-I am the parent process. PID is 5557
-I am the grandchild process. PID is 5558

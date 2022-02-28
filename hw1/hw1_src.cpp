@@ -16,25 +16,20 @@ int main()
 	// II. Split execution between parent (P) and child (C) processes
 	int pid = fork();  // duplicate current process P (P --> C)
 	
-	// i. branch for parent process (P)
-	if (pid > 0)
-	{
-		outFile << "I am the grandparent process. PID is " << getpid() << "\n";
-		outFile.close();
-		kill(-1, SIGCONT);
-		wait(NULL);
-	}	
 	
 	// ii. branch for child process (C)
 	if (pid == 0)
 	{
-		raise(SIGSTOP);
+		//raise(SIGSTOP);
 		int pid_c = fork();  // duplicate current process C (c --> GC)
 		
 		// a. branch for process C
 		if (pid_c > 0)
 		{
-			outFile << "I am the parent process. PID is " << getpid() << "\n";
+			std::cout << "SIGSTOP not yet sent" << "\n";
+			raise(SIGSTOP);
+			//outFile << "I am the parent process. PID is " << getpid() << "\n";
+			std::cout << "I am the parent process. PID is " << getpid() << "\n";
 			outFile.close();
 			kill(-1, SIGCONT);
 			wait(NULL);
@@ -43,8 +38,10 @@ int main()
 		// b. branch for grandchild process (GC)
 		if (pid_c == 0)
 		{
+			std::cout << "SIGSTOP not yet sent" << "\n";
 			raise(SIGSTOP);
-			outFile << "I am the grandchild process. PID is " << getpid() << "\n";
+			//outFile << "I am the grandchild process. PID is " << getpid() << "\n";
+			std::cout << "I am the grandchild process. PID is " << getpid() << "\n";
 			outFile.close();
 		}
 		
@@ -54,6 +51,16 @@ int main()
 			std::cout << "Error (Process C): child could not be created" << "\n";
 		}
 	}
+	
+	// i. branch for parent process (P)
+	if (pid > 0)
+	{
+		//outFile << "I am the grandparent process. PID is " << getpid() << "\n";
+		std::cout << "I am the grandparent process. PID is " << getpid() << "\n";
+		outFile.close();
+		kill(-1, SIGCONT); std::cout << "SIGCONT sent" << "\n";
+		wait(NULL);
+	}	
 	
 	// iii. If child was not created, notify user of error
 	if (pid == -1)
