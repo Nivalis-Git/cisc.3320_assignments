@@ -1,11 +1,12 @@
 // Assignment 1, 3320 CISC
 // Shterenberg, Simon
 
-#include <iostream>
+
 #include <fstream>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <signal.h>
+
 
 int main()
 {
@@ -20,10 +21,9 @@ int main()
 	if (pid > 0)
 	{
 		sleep(1);
-		std::cout << "I am the grandparent process. PID is " << getpid() << "\n";
+		outFile << "I am the grandparent process. PID is " << getpid() << "\n";
 		outFile.close();
-		std::cout << "SIGCONT not yet sent" << "\n";
-		kill(-1, SIGCONT); std::cout << "SIGCONT sent" << "\n";
+		kill(-1, SIGCONT);
 		wait(NULL);
 	}
 	
@@ -31,15 +31,12 @@ int main()
 	if (pid == 0)
 	{
 		int pid_c = fork();
-		std::cout << getpid() << ": SIGSTOP not yet raised" << "\n";
-		raise(SIGSTOP); std::cout << getpid() << ": SIGSTOP raised" << "\n";
+		raise(SIGSTOP);
 		
 		// a. branch for process C
 		if (pid_c > 0)
 		{
-			//std::cout << "(C) SIGSTOP not yet raised" << "\n";
-			//raise(SIGSTOP); std::cout << "(C) SIGSTOP raised" << "\n";
-			std::cout << "I am the parent process. PID is " << getpid() << "\n";
+			outFile << "I am the parent process. PID is " << getpid() << "\n";
 			outFile.close();
 			kill(-1, SIGCONT);
 			wait(NULL);
@@ -48,9 +45,8 @@ int main()
 		// b. branch for grandchild process (GC)
 		if (pid_c == 0)
 		{
-			//std::cout << "(GC) SIGSTOP not yet raised" << "\n";
-			raise(SIGSTOP); //std::cout << "(GC) SIGSTOP raised" << "\n";
-			std::cout << "I am the grandchild process. PID is " << getpid() << "\n";
+			raise(SIGSTOP);
+			outFile << "I am the grandchild process. PID is " << getpid() << "\n";
 			outFile.close();
 		}
 	}
