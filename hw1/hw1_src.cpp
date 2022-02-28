@@ -21,19 +21,22 @@ int main()
 	{
 		outFile << "I am the grandparent process. PID is " << getpid() << "\n";
 		outFile.close();
-		kill(-1, SIGCONT);
+		kill(-1, SIGCONT); std::cout << "SIGCONT sent" << "\n";
 		wait(NULL);
 	}	
 	
 	// ii. branch for child process (C)
 	if (pid == 0)
 	{
+		std::cout << "SIGSTOP not yet sent" << "\n";
 		raise(SIGSTOP);
+		std::cout << "gone past SIGSTOP" << "\n";
 		int pid_c = fork();  // duplicate current process C (c --> GC)
 		
 		// a. branch for process C
 		if (pid_c > 0)
 		{
+			std::cout << "In C branch" << "\n";
 			outFile << "I am the parent process. PID is " << getpid() << "\n";
 			outFile.close();
 			kill(-1, SIGCONT);
@@ -43,6 +46,7 @@ int main()
 		// b. branch for grandchild process (GC)
 		if (pid_c == 0)
 		{
+			std::cout << "In GC Branch" << "\n";
 			raise(SIGSTOP);
 			outFile << "I am the grandchild process. PID is " << getpid() << "\n";
 			outFile.close();
