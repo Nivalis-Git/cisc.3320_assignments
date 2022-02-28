@@ -1,8 +1,10 @@
-#include <iostream>
+#include <string>
 #include <fstream>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <signal.h>
+
+using namespace std;
 
 int main()
 {
@@ -16,7 +18,10 @@ int main()
 	// i. branch for parent process (P)
 	if (pid > 0)
 	{
-		std::cout << "I am the grandparent process. PID is " << getpid() << "\n";
+		string s("I am the grandparent process. PID is ");
+		s.append( std::to_string(getpid()) );
+		s.append("\n");
+		outFile << s;
 		kill(-1, SIGCONT);
 		wait(NULL);
 	}	
@@ -30,7 +35,10 @@ int main()
 		// a. branch for process C
 		if (pid_c > 0)
 		{
-			std::cout << "I am the parent process. PID is " << getpid() << "\n";
+			string s("I am the parent process. PID is ");
+			s.append( std::to_string(getpid()) );
+			s.append("\n");
+			outFile << s;
 			kill(-1, SIGCONT);
 			wait(NULL);
 		}
@@ -39,7 +47,10 @@ int main()
 		if (pid_c == 0)
 		{
 			raise(SIGSTOP);
-			std::cout << "I am the grandchild process. PID is " << getpid() << "\n";
+			string s("I am the grandchild process. PID is ");
+			s.append( std::to_string(getpid()) );
+			s.append("\n");
+			outFile << s;
 		}
 	}
 	
