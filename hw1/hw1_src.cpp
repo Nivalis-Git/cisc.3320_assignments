@@ -24,7 +24,7 @@ int main()
 		outFile.close();
 		kill(-1, SIGCONT);  // continues C
 		wait(NULL);
-	}	
+	}
 	
 	// ii. branch for child process (C)
 	if (pid == 0)
