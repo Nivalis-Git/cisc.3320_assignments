@@ -16,8 +16,8 @@ int main()
 	// ii. branch for child process (C)
 	if (pid == 0)
 	{
-		int pid_c = fork();  // duplicate current process C (c --> GC)
 		raise(SIGSTOP);
+		int pid_c = fork();  // duplicate current process C (c --> GC)
 		
 		// a. branch for process C
 		if (pid_c > 0)
