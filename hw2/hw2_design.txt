@@ -1,0 +1,16 @@
+Assignment 2, 3320 CISC
+Shterenberg, Simon
+
+----Introduction----
+dsd
+
+
+--------main
+----Parameters
+dsd
+
+----Purpose
+dsd
+
+----Structure
+. End of program.
