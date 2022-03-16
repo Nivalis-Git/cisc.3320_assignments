@@ -1,5 +1,0 @@
-PID: 51975	Resource Type: plotter
-1
-dsds
-PID: 51976	Resource Type: plotter
-1
