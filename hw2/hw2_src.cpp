@@ -15,6 +15,9 @@
 #include <random>
 
 
+void unlink(std::vector<std::string> &vSem);
+
+
 int main()
 {
 // I. Setting up out-stream, semaphores, and random number generator.
@@ -25,7 +28,7 @@ int main()
 	sem_plotter = sem_open("plotter", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 6);
 	sem_scanner = sem_open("scanner", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 4);
 	
-	std::vector<std::string> vRsrc;  // a vector to associate the semaphores with an index
+	std::vector<char*> vRsrc;  // a vector to associate the semaphores with an index
 	vRsrc.insert( vRsrc.end(), {"printer", "plotter", "scanner"} );
 	
 	int num;
@@ -41,8 +44,8 @@ int main()
 	if (pid == 0)
 	{
 		std::uniform_int_distribution<int> dstr(0,2);
-		std::string rsrc_name = vRsrc[dstr(rnd)];
-		sem_t *rsrc_sem = sem_open(rsrc_name.c_str(), 0);
+		char* rsrc_name = vRsrc[dstr(rnd)];
+		sem_t *rsrc_sem = sem_open(rsrc_name, 0);
 		int rsrc_qty;
 		sem_getvalue(rsrc_sem, &rsrc_qty);
 		
@@ -61,5 +64,14 @@ int main()
 	
 	
 // . End of program
+	unlink(vRsrc);
 	return 0;
+}
+
+void unlink(std::vector<char*> &vSem)
+{
+  for (char* sem : vSem)
+  {
+    sem_unlink(sem);
+  }
 }
