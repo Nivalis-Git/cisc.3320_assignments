@@ -25,8 +25,8 @@ int main()
 	sem_plotter = sem_open("plotter", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 6);
 	sem_scanner = sem_open("scanner", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 4);
 	
-	std::vector<sem_t*> vSem;  // a vector to associate the semaphores with an index
-	vSem.insert( vSem.end(), {sem_printer, sem_plotter, sem_scanner} );
+	std::vector<std::string> vRsrc;  // a vector to associate the semaphores with an index
+	vRsrc.insert( vRsrc.end(), {"printer", "plotter", "scanner"} );
 	
 	int num;
 	sem_getvalue(sem_printer, &num);
@@ -41,8 +41,8 @@ int main()
 	if (pid == 0)
 	{
 		std::uniform_int_distribution<int> dstr(0,2);
-		//sem_t *rsrc_sem = sem_open(rsrc_name.c_str(), 0);
-		sem_t *rsrc_sem = vSem[dstr(rnd)];
+		std::string rsrc_name = vRsrc[dstr(rnd)];
+		sem_t *rsrc_sem = sem_open(rsrc_name.c_str(), 0);
 		int rsrc_qty;
 		sem_getvalue(rsrc_sem, &rsrc_qty);
 		
