@@ -1,0 +1,3 @@
+Child PID: 5371		Resource Type: printer
+Child PID: 5371		Request Status: Succeeded
+
